@@ -40,4 +40,11 @@
     return [AliChannelPool sharedManager] ;
 }
 
+
+- (void)clear{
+    if (self.channels){
+        [self.channels removeAllObjects];
+    }
+}
+
 @end

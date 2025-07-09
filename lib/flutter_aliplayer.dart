@@ -67,6 +67,7 @@ typedef OnEventReportParams = void Function(Map params, String playerId);
 typedef OnPipStatusChanged = void Function(bool playing, String playerId);
 typedef OnWillStartPip = void Function(bool pipStatus, String playerId);
 typedef OnWillStopPip = void Function(bool pipStatus, String playerId);
+typedef OnLogInfoCallback = void Function(int level,String strlog);
 
 class FlutterAliplayer {
   OnPipStatusChanged? _onPipStatusChanged;
@@ -112,6 +113,7 @@ class FlutterAliplayer {
   //埋点
   OnEventReportParams? _onEventReportParams;
 
+  static OnLogInfoCallback? _onLogInfoCallback = null;
   // static MethodChannel channel = new MethodChannel('flutter_aliplayer');
   EventChannel _eventChannel = EventChannel("flutter_aliplayer_event");
   String playerId = 'default';
@@ -131,13 +133,51 @@ class FlutterAliplayer {
   }
 
   /// 播放器事件回调，准备完成事件
-  void setOnPrepared(OnPrepared prepared) {
+  void setOnPrepared(OnPrepared? prepared) {
     this._onPrepared = prepared;
+    FlutterAliPlayerFactory.methodChannel.invokeMethod(
+        'setOnPrepare', wrapWithPlayerId(arg: (null != _onPrepared)));
+    if (null != _onPrepared) {
+      BasicMessageChannel<String> _basicMessageChannel =
+      BasicMessageChannel<String>(
+        "aliPlayer_onPrepare${playerId}",
+        StringCodec(),
+      );
+      // 注册调用 Flutter 端的 callback, 并发送至 Native 端
+      _basicMessageChannel.setMessageHandler((String? msg) async {
+        Map<String, dynamic> map = jsonDecode(msg!);
+        String playerId = map['playerId'];
+        String method = map['method'];
+        if (null != _onPrepared && method == "onPrepared") {
+          this._onPrepared!(playerId);
+        }
+        return '';
+      });
+    }
   }
 
   /// 播放器事件回调，首帧显示事件
   void setOnRenderingStart(OnRenderingStart renderingStart) {
     this._onRenderingStart = renderingStart;
+    FlutterAliPlayerFactory.methodChannel.invokeMethod(
+        'setOnRenderingStart', wrapWithPlayerId(arg: (null != _onRenderingStart)));
+    if (null != _onRenderingStart) {
+      BasicMessageChannel<String> _basicMessageChannel =
+      BasicMessageChannel<String>(
+        "aliPlayer_onRenderingStart${playerId}",
+        StringCodec(),
+      );
+      // 注册调用 Flutter 端的 callback, 并发送至 Native 端
+      _basicMessageChannel.setMessageHandler((String? msg) async {
+        Map<String, dynamic> map = jsonDecode(msg!);
+        String playerId = map['playerId'];
+        String method = map['method'];
+        if (null != _onRenderingStart && method == "onRenderingStart") {
+          this._onRenderingStart!(playerId);
+        }
+        return '';
+      });
+    }
   }
 
   /// 视频大小变化回调
@@ -205,7 +245,8 @@ class FlutterAliplayer {
         Map<String, dynamic> map = jsonDecode(msg!);
         int newState = map['newState'];
         String playerId = map['playerId'];
-        if (null != _onStateChanged) {
+        String method = map['method'];
+        if (null != _onStateChanged && method == "onStateChanged") {
           this._onStateChanged!(newState, playerId);
         }
         return '';
@@ -1093,6 +1134,13 @@ class FlutterAliplayer {
         .invokeMethod("setLogLevel", level);
   }
 
+  /// 设置日志打印回调
+  /// [OnLogInfoCallback]
+  static Future<void> setLogInfoCallBack(OnLogInfoCallback? callback) async {
+    _onLogInfoCallback = callback;
+   return FlutterAliPlayerFactory.methodChannel.invokeMethod("setLogInfoBlock",{"arg": null != callback });
+  }
+
   /// 设置帧级别日志
   /// value 0代表关闭 1代表打开
   static Future<void> setLogOption(int value) async {
@@ -1101,11 +1149,13 @@ class FlutterAliplayer {
   }
 
   /// 获取日志级别
-  /// 仅对Android系统有效
-  static Future<dynamic> getLogLevel() {
-    return FlutterAliPlayerFactory.methodChannel.invokeMethod(
+  /// 开启帧级别日志的情况下，日志级别为trace
+  /// [LogLevel] 日志级别
+  static Future<int> getLogLevel() async {
+    int logLevel = await FlutterAliPlayerFactory.methodChannel.invokeMethod(
       "getLogLevel",
     );
+    return logLevel;
   }
 
   /// 设置是否使用http2
@@ -1650,6 +1700,13 @@ class FlutterAliplayer {
         }
         var url = event['url'];
         print("EventStreamSwitchedFail ${event}");
+        break;
+      case "AliPlayer_LogCallBackInfo":
+        if (null != _onLogInfoCallback) {
+          String level = event['logLevel'];
+          String strLog = event['strLog'];
+          _onLogInfoCallback!(int.parse(level),strLog);
+        }
         break;
       case "onEventReportParams":
         if (player._onEventReportParams != null) {

@@ -21,6 +21,8 @@
 @property(nonatomic, assign) int64_t currentPosition;
 
 @property(nonatomic,strong) FlutterBasicMessageChannel* onStatusChangeChannel;
+@property(nonatomic,strong) FlutterBasicMessageChannel* onPrepareChannel;
+@property(nonatomic,strong) FlutterBasicMessageChannel* onRenderingStartChannel;
 @end
 
 @implementation AliPlayerProxy
@@ -54,7 +56,7 @@
 }
 
 
-- (void)settingOnStateChange:(NSObject<FlutterBinaryMessenger> *)binaryMessenger :(_Bool)enable {
+- (void)enableOnStateChanged:(NSObject<FlutterBinaryMessenger> *)binaryMessenger :(_Bool)enable {
     NSString *channelName = [NSString stringWithFormat:@"aliPlayer_onStateChanged%@",_playerId];
     if (enable){
         self.onStatusChangeChannel =  [[FlutterBasicMessageChannel alloc]initWithName:channelName binaryMessenger:binaryMessenger codec:[FlutterStringCodec sharedInstance]];
@@ -63,6 +65,32 @@
         if (self.onStatusChangeChannel) {
             [[AliChannelPool sharedManager] removeObserver:self.onStatusChangeChannel forKeyPath:channelName];
             self.onStatusChangeChannel = NULL;
+        }
+    }
+}
+
+- (void)enableOnPrepared:(NSObject<FlutterBinaryMessenger> *)binaryMessenger :(_Bool)enable {
+    NSString *channelName = [NSString stringWithFormat:@"aliPlayer_onPrepare%@",_playerId];
+    if (enable){
+        self.onPrepareChannel =  [[FlutterBasicMessageChannel alloc]initWithName:channelName binaryMessenger:binaryMessenger codec:[FlutterStringCodec sharedInstance]];
+        [[AliChannelPool sharedManager] addChannel:_onPrepareChannel forKey:channelName];
+    } else {
+        if (self.onPrepareChannel) {
+            [[AliChannelPool sharedManager] removeObserver:self.onPrepareChannel forKeyPath:channelName];
+            self.onPrepareChannel = NULL;
+        }
+    }
+}
+
+- (void)enableOnRenderingStart:(NSObject<FlutterBinaryMessenger> *)binaryMessenger :(_Bool)enable{
+    NSString *channelName = [NSString stringWithFormat:@"aliPlayer_onRenderingStart%@",_playerId];
+    if (enable){
+        self.onRenderingStartChannel =  [[FlutterBasicMessageChannel alloc]initWithName:channelName binaryMessenger:binaryMessenger codec:[FlutterStringCodec sharedInstance]];
+        [[AliChannelPool sharedManager] addChannel:_onPrepareChannel forKey:channelName];
+    } else {
+        if (self.onRenderingStartChannel) {
+            [[AliChannelPool sharedManager] removeObserver:self.onPrepareChannel forKeyPath:channelName];
+            self.onRenderingStartChannel = NULL;
         }
     }
 }
@@ -89,10 +117,34 @@
 -(void)onPlayerEvent:(AliPlayer*)player eventType:(AVPEventType)eventType {
     switch (eventType) {
         case AVPEventPrepareDone:
-            self.eventSink(@{kAliPlayerMethod:@"onPrepared",kAliPlayerId:_playerId});
+//            self.eventSink(@{kAliPlayerMethod:@"onPrepared",kAliPlayerId:_playerId});
+            if (self.onPrepareChannel){
+                NSDictionary *playerStatus = @{
+                    @"method": @"onPrepared",
+                    kAliPlayerId: _playerId
+                };
+                NSError *error = nil;
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:playerStatus options:NSJSONWritingPrettyPrinted error:&error];
+                if (jsonData) {
+                    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                    [self.onPrepareChannel sendMessage:jsonString ];
+                }
+            }
             break;
         case AVPEventFirstRenderedStart:
-            self.eventSink(@{kAliPlayerMethod:@"onRenderingStart",kAliPlayerId:_playerId});
+//            self.eventSink(@{kAliPlayerMethod:@"onRenderingStart",kAliPlayerId:_playerId});
+            if (self.onRenderingStartChannel){
+                NSDictionary *playerStatus = @{
+                    @"method": @"onRenderingStart",
+                    kAliPlayerId: _playerId
+                };
+                NSError *error = nil;
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:playerStatus options:NSJSONWritingPrettyPrinted error:&error];
+                if (jsonData) {
+                    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                    [self.onRenderingStartChannel sendMessage:jsonString];
+                }
+            }
             break;
         case AVPEventLoadingStart:
             self.eventSink(@{kAliPlayerMethod:@"onLoadingBegin",kAliPlayerId:_playerId});

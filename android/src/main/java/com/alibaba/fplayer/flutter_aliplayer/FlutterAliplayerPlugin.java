@@ -56,6 +56,7 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
     private static final Handler sMainHandler = new Handler(Looper.getMainLooper());
     private FlutterAliFloatWindowManager flutterAliFloatWindowManager;
     private VidPlayerConfigGen mVidPlayerConfigGen;
+    private Logger.OnLogCallback mOnLogCallback;
 
     public FlutterAliplayerPlugin() {
         super(StandardMessageCodec.INSTANCE);
@@ -95,16 +96,6 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
         });
     }
 
-    //   This static function is optional and equivalent to onAttachedToEngine. It supports the old
-//   pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-//   plugin registration via this function while apps migrate to use the new Android APIs
-//   post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-//
-//   It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-//   them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-//   depending on the user's project. onAttachedToEngine or registerWith must both be defined
-//   in the same class.
-    // TODO:  have User use it to error
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         switch (call.method) {
@@ -138,8 +129,6 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
                     FlutterAliLiveShiftPlayer flutterAliLiveShiftPlayer = new FlutterAliLiveShiftPlayer(flutterPluginBinding, createPlayerId);
                     initListener(flutterAliLiveShiftPlayer);
                     mFlutterAliLiveShiftPlayerMap.put(createPlayerId, flutterAliLiveShiftPlayer);
-                } else {
-
                 }
 
                 result.success(null);
@@ -173,6 +162,14 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
             case "setLogLevel":
                 Integer level = (Integer) call.arguments;
                 setLogLevel(level);
+                result.success(null);
+                break;
+            case "setLogInfoBlock":
+                boolean isEnable = false;
+                if(call.hasArgument("arg")){
+                    isEnable = Boolean.TRUE.equals(call.argument("arg"));
+                }
+                setOnLogCallback(isEnable);
                 result.success(null);
                 break;
             case "setLogOption":
@@ -414,6 +411,20 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
             mLogLevel = Logger.LogLevel.AF_LOG_LEVEL_NONE;
         }
         Logger.getInstance(flutterPluginBinding.getApplicationContext()).setLogLevel(mLogLevel);
+    }
+
+    private void setOnLogCallback(Boolean enableLog) {
+        this.mOnLogCallback = enableLog ? new Logger.OnLogCallback() {
+            @Override
+            public void onLog(Logger.LogLevel logLevel, String strlog) {
+                Map<String, String> map = new HashMap<>();
+                map.put("method", "AliPlayer_LogCallBackInfo");
+                map.put("logLevel", logLevel.getValue() + "");
+                map.put("strLog", strlog);
+                mEventSink.success(map);
+            }
+        } : null;
+        Logger.getInstance(flutterPluginBinding.getApplicationContext()).setLogCallback(mOnLogCallback);
     }
 
     /**

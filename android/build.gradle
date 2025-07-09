@@ -62,9 +62,9 @@ dependencies {
     // 1. 音视频终端SDK及版本，建议使用最新版本，详情参考官网：https://help.aliyun.com/zh/apsara-video-sdk/developer-reference/fast-integration-for-android
     def aio_sdk_version = "7.1.0"
     // 2. 播放器SDK及版本，建议使用最新版本，详情参考官网：https://help.aliyun.com/zh/vod/developer-reference/release-notes-for-apsaravideo-player-sdk-for-android
-    def player_sdk_version = "7.2.0"
+    def player_sdk_version = "7.3.0"
     // 3. rts 低延迟直播组件 建议使用最新版本，详情参考官网：https://help.aliyun.com/zh/live/user-guide/pull-streams-over-rts-on-android?spm=a2c4g.11186623.help-menu-29949.d_2_11_0_5_0_0.4c1e4ba8kExEnT&scm=20140722.H_2861466._.OR_help-T_cn~zh-V_1
-    def rts_sdk_version = "7.2.0"
+    def rts_sdk_version = "7.3.0"
 
     // 根据 useAIOFramework 的值选择相应的 SDK
     if (useAIOFramework) {

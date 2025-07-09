@@ -118,6 +118,6 @@ public class FlutterAliPlayerUtils {
 
     // TODO: 发布前请修改版本并删除此提示
     public static String sdkVersion() {
-        return "{\"platform\":\"flutter\",\"flutter-version\":\"7.2.0\"}";
+        return "{\"platform\":\"flutter\",\"flutter-version\":\"7.3.0\"}";
     }
 }

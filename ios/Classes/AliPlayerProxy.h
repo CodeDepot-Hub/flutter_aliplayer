@@ -57,7 +57,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)bindPlayerView:(FlutterAliPlayerView*)fapv;
 
--(void)settingOnStateChange:(NSObject<FlutterBinaryMessenger> *)binaryMessenger  :(bool)enable;
+-(void)enableOnStateChanged:(NSObject<FlutterBinaryMessenger> *)binaryMessenger  :(bool)enable;
+
+-(void)enableOnPrepared:(NSObject<FlutterBinaryMessenger> *)binaryMessenger  :(bool)enable;
+
+-(void)enableOnRenderingStart:(NSObject<FlutterBinaryMessenger> *)binaryMessenger  :(bool)enable;
 
 @end
 
