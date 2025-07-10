@@ -3,15 +3,19 @@
 #import "FlutterAliDownloaderPlugin.h"
 #import "FlutterAliMediaLoader.h"
 #import "FlutterAliPlayerGlobalSettings.h"
+#import "AliChannelPool.h"
 
 /**
  *  业务标识
  *  TODO: 发布版本前,请修改版本并删除此提示
  */
-static NSString *const kExtraDataFlutter =@"{\"platform\":\"flutter\",\"flutter-version\":\"7.2.0\"}";
+static NSString *const kExtraDataFlutter =@"{\"platform\":\"flutter\",\"flutter-version\":\"7.3.0\"}";
 
 @implementation FlutterAliplayerPlugin
 
+/**
+    create
+ */
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     //声明业务场景
     [AliPlayerGlobalSettings setOption:SET_EXTRA_DATA value:kExtraDataFlutter];
@@ -22,6 +26,13 @@ static NSString *const kExtraDataFlutter =@"{\"platform\":\"flutter\",\"flutter-
     [FlutterAliDownloaderPlugin registerWithRegistrar:registrar];
     [FlutterAliPlayerGlobalSettings registerWithRegistrar:registrar];
     [FlutterAliMediaLoader registerWithRegistrar:registrar];
+}
+
+/**
+    destroy
+ */
+- (void)detachFromEngineForRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar{
+    [[AliChannelPool sharedManager] clear];
 }
 
 

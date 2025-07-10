@@ -689,33 +689,17 @@ public class FlutterAliPlayer extends FlutterPlayerBase {
             case "setOnStateChanged":
                 boolean isEnable = Boolean.TRUE.equals(methodCall.argument("arg"));
                 String channelId = "aliPlayer_onStateChanged" + mPlayerId;
-                if (isEnable) {
-                    mAliPlayer.setOnStateChangedListener(new IPlayer.OnStateChangedListener() {
-                        @Override
-                        public void onStateChanged(int newState) {
-                            JSONObject object = new JSONObject();
-                            try {
-                                object.put("method", "onStateChanged");
-                                object.put("newState", newState);
-                                object.put("playerId", mPlayerId);
-                                if (!AliChannelPool.getInstance().containChannel(channelId)) {
-                                    BasicMessageChannel<String> mBasicMessageChannel = new BasicMessageChannel<>(binding.getBinaryMessenger(), "aliPlayer_onStateChanged" + mPlayerId, StringCodec.INSTANCE);
-                                    mBasicMessageChannel.send(object.toString());
-                                    AliChannelPool.getInstance().addChannel(channelId, mBasicMessageChannel);
-                                } else {
-                                    AliChannelPool.getInstance().channelForKey(channelId).send(object.toString());
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                } else {
-                    mAliPlayer.setOnStateChangedListener(null);
-                    if (AliChannelPool.getInstance().containChannel(channelId)) {
-                        AliChannelPool.getInstance().removeChannel(channelId);
-                    }
-                }
+                enableOnStateChanged(isEnable,channelId);
+                break;
+            case "setOnPrepare":
+                boolean isOnPrepareEnable = Boolean.TRUE.equals(methodCall.argument("arg"));
+                String onPrepareChannelId = "aliPlayer_onPrepare" + mPlayerId;
+                enableOnPrepared(isOnPrepareEnable,onPrepareChannelId);
+                break;
+            case "setOnRenderingStart":
+                boolean isOnRenderingStart = Boolean.TRUE.equals(methodCall.argument("arg"));
+                String OnRenderingStartChannelId = "aliPlayer_onRenderingStart" + mPlayerId;
+                enableOnRenderingStart(isOnRenderingStart,OnRenderingStartChannelId);
                 break;
             case "setConvertURLCallback":
                 AliPlayerFactory.setConvertURLCallback(new IPlayer.ConvertURLCallback() {
@@ -1331,6 +1315,109 @@ public class FlutterAliPlayer extends FlutterPlayerBase {
             return mAliPlayer.getCacheFilePath(url);
         }
         return null;
+    }
+
+    /**
+     * 启用/关闭 onStateChanged
+     * @param isEnable  是/否 启用
+     * @param channelID 通道id
+     */
+    private void enableOnStateChanged(boolean isEnable,String channelID){
+        if (isEnable) {
+            mAliPlayer.setOnStateChangedListener(new IPlayer.OnStateChangedListener() {
+                @Override
+                public void onStateChanged(int newState) {
+                    JSONObject object = new JSONObject();
+                    try {
+                        object.put("method", "onStateChanged");
+                        object.put("newState", newState);
+                        object.put("playerId", mPlayerId);
+                        if (!AliChannelPool.getInstance().containChannel(channelID)) {
+                            BasicMessageChannel<String> mBasicMessageChannel = new BasicMessageChannel<>(binding.getBinaryMessenger(), "aliPlayer_onStateChanged" + mPlayerId, StringCodec.INSTANCE);
+                            mBasicMessageChannel.send(object.toString());
+                            AliChannelPool.getInstance().addChannel(channelID, mBasicMessageChannel);
+                        } else {
+                            AliChannelPool.getInstance().channelForKey(channelID).send(object.toString());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            mAliPlayer.setOnStateChangedListener(null);
+            if (AliChannelPool.getInstance().containChannel(channelID)) {
+                AliChannelPool.getInstance().removeChannel(channelID);
+            }
+        }
+    }
+
+    /**
+     * 启用/关闭 onPrepared
+     * @param isEnable  是/否 启用
+     * @param channelID 通道id
+     */
+    private void enableOnPrepared(boolean isEnable,String channelID){
+        if (isEnable) {
+            mAliPlayer.setOnPreparedListener(new IPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared() {
+                    JSONObject object = new JSONObject();
+                    try {
+                        object.put("method", "onPrepared");
+                        object.put("playerId", mPlayerId);
+                        if (!AliChannelPool.getInstance().containChannel(channelID)) {
+                            BasicMessageChannel<String> mBasicMessageChannel = new BasicMessageChannel<>(binding.getBinaryMessenger(), channelID, StringCodec.INSTANCE);
+                            mBasicMessageChannel.send(object.toString());
+                            AliChannelPool.getInstance().addChannel(channelID, mBasicMessageChannel);
+                        } else {
+                            AliChannelPool.getInstance().channelForKey(channelID).send(object.toString());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            mAliPlayer.setOnPreparedListener(null);
+            if (AliChannelPool.getInstance().containChannel(channelID)) {
+                AliChannelPool.getInstance().removeChannel(channelID);
+            }
+        }
+    }
+
+    /**
+     * 启用/关闭 onPrepared
+     * @param isEnable  是/否 启用
+     * @param channelID 通道id
+     */
+    private void enableOnRenderingStart(boolean isEnable,String channelID){
+        if (isEnable) {
+            mAliPlayer.setOnRenderingStartListener(new IPlayer.OnRenderingStartListener() {
+                @Override
+                public void onRenderingStart() {
+                    JSONObject object = new JSONObject();
+                    try {
+                        object.put("method", "onRenderingStart");
+                        object.put("playerId", mPlayerId);
+                        if (!AliChannelPool.getInstance().containChannel(channelID)) {
+                            BasicMessageChannel<String> mBasicMessageChannel = new BasicMessageChannel<>(binding.getBinaryMessenger(), channelID, StringCodec.INSTANCE);
+                            mBasicMessageChannel.send(object.toString());
+                            AliChannelPool.getInstance().addChannel(channelID, mBasicMessageChannel);
+                        } else {
+                            AliChannelPool.getInstance().channelForKey(channelID).send(object.toString());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            mAliPlayer.setOnRenderingStartListener(null);
+            if (AliChannelPool.getInstance().containChannel(channelID)) {
+                AliChannelPool.getInstance().removeChannel(channelID);
+            }
+        }
     }
 
     private PlayerConfig mapCovertToPlayerConfig(Map<String, Object> map, PlayerConfig config) {

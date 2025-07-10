@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 根据字符串获取通道的方法
 - (id)channelForKey:(NSString *)key;
 
+
+- (void) clear;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -21,6 +21,8 @@ AliPlayerAudioSesstionTypeMix,
 AliPlayerAudioSesstionTypeNone,
 };
 
+typedef void(^LogInfoBlock)(AVPLogLevel level,NSString* strLog);
+
 @interface AliPlayerFactory () {
     NSObject <FlutterBinaryMessenger> *_messenger;
     FlutterMethodChannel *_commonChannel;
@@ -36,6 +38,8 @@ AliPlayerAudioSesstionTypeNone,
 @property(nonatomic, strong) NSMutableDictionary *globalBackupUrlMap;
 @property(nonatomic, strong) NSObject<FlutterBinaryMessenger> *binaryMessenger;
 @property(nonatomic, strong) FlutterBasicMessageChannel *renderMethodChannel;
+@property(nonatomic, assign) AVPLogLevel mLogLevel;
+@property(nonatomic, assign) LogInfoBlock mLogBlock;
 
 @end
 
@@ -204,7 +208,7 @@ id _Nullable
 
 /**
  * prepare
- * @param arr
+ * @param arr  传输信息
  */
 - (void)prepare:(NSArray *)arr {
     FlutterResult result = arr[1];
@@ -680,15 +684,44 @@ id _Nullable
 
 - (void)getLogLevel:(NSArray *)arr {
     FlutterResult result = arr[1];
-    //TODO 拿不到
-    result(@(-1));
+    if (self.mLogLevel){
+        result(@(self.mLogLevel));
+        return;
+    }
+    //default level is INFO
+    result(@(LOG_LEVEL_INFO));
 }
 
 - (void)setLogLevel:(NSArray *)arr {
     FlutterResult result = arr[1];
     FlutterMethodCall *call = arr.firstObject;
     NSNumber *val = [call arguments];
-    [AliPlayer setLogCallbackInfo:val.intValue callbackBlock:nil];
+    self.mLogLevel = val.intValue;
+    [AliPlayer setLogCallbackInfo:val.intValue callbackBlock:self.mLogBlock?:nil];
+    result(nil);
+}
+
+
+
+- (void)setLogInfoBlock:(NSArray *)arr {
+    FlutterResult result = arr[1];
+    int value = arr.lastObject ? [arr.lastObject intValue] : 0;
+    __weak __typeof__(self) weakSelf = self;
+   
+    
+    if (nil == self.mLogBlock && value == 1){
+        self.mLogBlock = ^(AVPLogLevel level, NSString *strLog) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+                // 在后台线程执行耗时操作
+            if (strongSelf.eventSink){
+                strongSelf.eventSink(@{kAliPlayerMethod: @"AliPlayer_LogCallBackInfo",@"logLevel":[NSString stringWithFormat:@"%ld",level],@"strLog":strLog});
+            }
+        };
+    } else {
+        self.mLogBlock = nil;
+    }
+    
+    [AliPlayer setLogCallbackInfo:self.mLogLevel callbackBlock:value == 1?self.mLogBlock:nil];
     result(nil);
 }
 
@@ -1649,10 +1682,27 @@ NSString *hashCallback(NSString *url) {
   设置状态监听
  */
 - (void)setOnStateChanged:(NSArray *)arr {
-    FlutterResult result = arr[1];
+//    FlutterResult result = arr[1];
     AliPlayerProxy *proxy = arr[2];
     NSNumber *enable = arr[3];
-    [proxy settingOnStateChange:self.binaryMessenger :enable.boolValue];
+    [proxy enableOnStateChanged:self.binaryMessenger :enable.boolValue];
+}
+
+/**
+  设置prepare 监听
+ */
+- (void)setOnPrepare:(NSArray *)arr {
+//    FlutterResult result = arr[1];
+    AliPlayerProxy *proxy = arr[2];
+    NSNumber *enable = arr[3];
+    [proxy enableOnPrepared:self.binaryMessenger :enable.boolValue];
+}
+
+- (void)setOnRenderingStart:(NSArray *)arr {
+    //    FlutterResult result = arr[1];
+    AliPlayerProxy *proxy = arr[2];
+    NSNumber *enable = arr[3];
+    [proxy enableOnRenderingStart:self.binaryMessenger :enable.boolValue];
 }
 
 

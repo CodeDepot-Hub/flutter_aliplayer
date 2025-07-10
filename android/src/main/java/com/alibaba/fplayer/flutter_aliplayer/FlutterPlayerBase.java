@@ -39,31 +39,31 @@ public abstract class FlutterPlayerBase {
     public abstract IPlayer getAliPlayer();
 
     public void initListener(final IPlayer player) {
-        player.setOnPreparedListener(new IPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared() {
-                Map<String, Object> map = new HashMap<>();
-                map.put("method", "onPrepared");
-                map.put("playerId", mPlayerId);
-//                mEventSink.success(map);
-                if (mFlutterAliPlayerListener != null) {
-                    mFlutterAliPlayerListener.onPrepared(map);
-                }
-            }
-        });
+//        player.setOnPreparedListener(new IPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared() {
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("method", "onPrepared");
+//                map.put("playerId", mPlayerId);
+////                mEventSink.success(map);
+//                if (mFlutterAliPlayerListener != null) {
+//                    mFlutterAliPlayerListener.onPrepared(map);
+//                }
+//            }
+//        });
 
-        player.setOnRenderingStartListener(new IPlayer.OnRenderingStartListener() {
-            @Override
-            public void onRenderingStart() {
-                Map<String, Object> map = new HashMap<>();
-                map.put("method", "onRenderingStart");
-                map.put("playerId", mPlayerId);
-//                mEventSink.success(map);
-                if (mFlutterAliPlayerListener != null) {
-                    mFlutterAliPlayerListener.onRenderingStart(map);
-                }
-            }
-        });
+//        player.setOnRenderingStartListener(new IPlayer.OnRenderingStartListener() {
+//            @Override
+//            public void onRenderingStart() {
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("method", "onRenderingStart");
+//                map.put("playerId", mPlayerId);
+////                mEventSink.success(map);
+//                if (mFlutterAliPlayerListener != null) {
+//                    mFlutterAliPlayerListener.onRenderingStart(map);
+//                }
+//            }
+//        });
 
         player.setOnChooseTrackIndexListener(new IPlayer.OnChooseTrackIndexListener() {
             @Override

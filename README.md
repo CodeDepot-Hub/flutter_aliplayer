@@ -40,6 +40,22 @@ dependencies:
 
 ## AliPlayer
 
+### 日志设置 + 日志回调
+
+```dart
+  /// 设置日志等级
+  FlutterAliplayer.setLogLevel(LogLevel.AF_LOG_LEVEL_INFO);
+  /// 开启/关闭 日志
+  FlutterAliplayer.enableConsoleLog(true);
+  // 日志回调信息
+  FlutterAliplayer.setLogInfoCallBack((level, msg) {
+    print("[LOG][LEVEL][$level] $msg");
+  });
+  /// 开启帧日志回调，一般在排查问题时打开
+  FlutterAliplayer.setLogOption(1);
+```
+
+
 ### 1. 播放控制
 
 ```dart
