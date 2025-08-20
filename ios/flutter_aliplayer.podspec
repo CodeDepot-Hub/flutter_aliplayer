@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_aliplayer'
-  s.version          = '7.3.0'
+  s.version          = '7.3.1'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -22,7 +22,7 @@ A new flutter plugin project.
 
   # 定义 SDK 版本
   # 1. 音视频终端SDK及版本，建议使用最新版本，详情参考官网：https://help.aliyun.com/zh/apsara-video-sdk/developer-reference/fast-integration-for-android
-  aio_sdk_version = '7.1.0'
+  aio_sdk_version = '7.3.0'
   # 2. 播放器SDK及版本，建议使用最新版本，详情参考官网：https://help.aliyun.com/zh/vod/developer-reference/release-notes-for-apsaravideo-player-sdk-for-android
   player_sdk_version = '7.3.2'
   # 3. RTS SDK及版本，建议使用最新版本，详情参考官网：https://help.aliyun.com/zh/live/user-guide/pull-streams-over-rts-on-ios

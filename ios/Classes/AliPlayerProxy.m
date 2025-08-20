@@ -57,7 +57,14 @@
 
 
 - (void)enableOnStateChanged:(NSObject<FlutterBinaryMessenger> *)binaryMessenger :(_Bool)enable {
-    NSString *channelName = [NSString stringWithFormat:@"aliPlayer_onStateChanged%@",_playerId];
+    NSString *channelName;
+    if (self.playerType == 1) {
+        channelName =  [NSString stringWithFormat:@"listPlayer_onStateChanged%@",_playerId];
+    } else {
+        channelName = [NSString stringWithFormat:@"aliPlayer_onStateChanged%@",
+                       _playerId];
+    }
+    
     if (enable){
         self.onStatusChangeChannel =  [[FlutterBasicMessageChannel alloc]initWithName:channelName binaryMessenger:binaryMessenger codec:[FlutterStringCodec sharedInstance]];
         [[AliChannelPool sharedManager] addChannel:_onStatusChangeChannel forKey:channelName];
@@ -70,7 +77,13 @@
 }
 
 - (void)enableOnPrepared:(NSObject<FlutterBinaryMessenger> *)binaryMessenger :(_Bool)enable {
-    NSString *channelName = [NSString stringWithFormat:@"aliPlayer_onPrepare%@",_playerId];
+    NSString *channelName;
+    if (self.playerType == 1) {
+        channelName =  [NSString stringWithFormat:@"listPlayer_onPrepare%@",_playerId];
+    } else {
+        channelName =  [NSString stringWithFormat:@"aliPlayer_onPrepare%@",_playerId];
+    }
+    
     if (enable){
         self.onPrepareChannel =  [[FlutterBasicMessageChannel alloc]initWithName:channelName binaryMessenger:binaryMessenger codec:[FlutterStringCodec sharedInstance]];
         [[AliChannelPool sharedManager] addChannel:_onPrepareChannel forKey:channelName];
@@ -83,7 +96,13 @@
 }
 
 - (void)enableOnRenderingStart:(NSObject<FlutterBinaryMessenger> *)binaryMessenger :(_Bool)enable{
-    NSString *channelName = [NSString stringWithFormat:@"aliPlayer_onRenderingStart%@",_playerId];
+    NSString *channelName;
+    if (self.playerType == 1) {
+        channelName =  [NSString stringWithFormat:@"listPlayer_onRenderingStart%@",_playerId];
+    } else {
+        channelName =  [NSString stringWithFormat:@"aliPlayer_onRenderingStart%@",_playerId];
+    }
+    
     if (enable){
         self.onRenderingStartChannel =  [[FlutterBasicMessageChannel alloc]initWithName:channelName binaryMessenger:binaryMessenger codec:[FlutterStringCodec sharedInstance]];
         [[AliChannelPool sharedManager] addChannel:_onPrepareChannel forKey:channelName];

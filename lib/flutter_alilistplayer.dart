@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 
 import 'flutter_aliplayer.dart';
@@ -119,5 +122,78 @@ class FlutterAliListPlayer extends FlutterAliplayer {
     };
     return FlutterAliPlayerFactory.methodChannel
         .invokeMethod("moveTo", wrapWithPlayerId(arg: info));
+  }
+
+  @override
+  void setOnPrepared(OnPrepared? prepared) {
+    this.onPrepared = prepared;
+    FlutterAliPlayerFactory.methodChannel.invokeMethod(
+        'setOnPrepare', wrapWithPlayerId(arg: (null != onPrepared)));
+    if (null != onPrepared) {
+      BasicMessageChannel<String> _basicMessageChannel =
+          BasicMessageChannel<String>(
+        "listPlayer_onPrepare${playerId}",
+        StringCodec(),
+      );
+      // 注册调用 Flutter 端的 callback, 并发送至 Native 端
+      _basicMessageChannel.setMessageHandler((String? msg) async {
+        Map<String, dynamic> map = jsonDecode(msg!);
+        String playerId = map['playerId'];
+        String method = map['method'];
+        if (null != onPrepared && method == "onPrepared") {
+          this.onPrepared!(playerId);
+        }
+        return '';
+      });
+    }
+  }
+
+  @override
+  void setOnRenderingStart(OnRenderingStart renderingStart) {
+    this.onRenderingStart = renderingStart;
+    FlutterAliPlayerFactory.methodChannel.invokeMethod('setOnRenderingStart',
+        wrapWithPlayerId(arg: (null != onRenderingStart)));
+    if (null != onRenderingStart) {
+      BasicMessageChannel<String> _basicMessageChannel =
+          BasicMessageChannel<String>(
+        "listPlayer_onRenderingStart${playerId}",
+        StringCodec(),
+      );
+      // 注册调用 Flutter 端的 callback, 并发送至 Native 端
+      _basicMessageChannel.setMessageHandler((String? msg) async {
+        Map<String, dynamic> map = jsonDecode(msg!);
+        String playerId = map['playerId'];
+        String method = map['method'];
+        if (null != onRenderingStart && method == "onRenderingStart") {
+          this.onRenderingStart!(playerId);
+        }
+        return '';
+      });
+    }
+  }
+
+  @override
+  void setOnStateChanged(OnStateChanged? stateChanged) {
+      this.onStateChanged = stateChanged;
+      FlutterAliPlayerFactory.methodChannel.invokeMethod(
+          'setOnStateChanged', wrapWithPlayerId(arg: (null != stateChanged)));
+      if (null != stateChanged) {
+        BasicMessageChannel<String> _basicMessageChannel =
+        BasicMessageChannel<String>(
+          "listPlayer_onStateChanged${playerId}",
+          StringCodec(),
+        );
+        // 注册调用 Flutter 端的 callback, 并发送至 Native 端
+        _basicMessageChannel.setMessageHandler((String? msg) async {
+          Map<String, dynamic> map = jsonDecode(msg!);
+          int newState = map['newState'];
+          String playerId = map['playerId'];
+          String method = map['method'];
+          if (null != onStateChanged && method == "onStateChanged") {
+            this.onStateChanged!(newState, playerId);
+          }
+          return '';
+        });
+      }
   }
 }

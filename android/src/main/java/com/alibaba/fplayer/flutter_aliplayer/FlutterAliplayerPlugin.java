@@ -65,6 +65,10 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         this.flutterPluginBinding = flutterPluginBinding;
+        //上下文
+        this.mContext = flutterPluginBinding.getApplicationContext();
+        checkAvailableRts();
+        // 注册视图
         flutterPluginBinding.getPlatformViewRegistry().registerViewFactory("flutter_aliplayer_render_view", this);
         // 声明业务场景
         AliPlayerGlobalSettings.setOption(AliPlayerGlobalSettings.SET_EXTRA_DATA, FlutterAliPlayerUtils.sdkVersion());
@@ -75,17 +79,19 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
         //播放器 来自flutter 消费channel
         mMethodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "plugins.flutter_aliplayer_factory");
         mMethodChannel.setMethodCallHandler(this);
-        //上下文
-        mContext = flutterPluginBinding.getApplicationContext();
+
         mEventChannel = new EventChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_aliplayer_event");// Send eventData to Method
         mEventChannel.setStreamHandler(this);
 
         flutterAliFloatWindowManager = new FlutterAliFloatWindowManager(flutterPluginBinding.getApplicationContext());//
 
-        // TODO 外部调用  是否删除
+        // 默认实现 setCacheUrlHashCallback
         AliPlayerGlobalSettings.setCacheUrlHashCallback(new AliPlayerGlobalSettings.OnGetUrlHashCallback() {
             @Override
             public String getUrlHashCallback(String s) {
+                if (s.contains("Ciphertext")) {
+                    return FlutterAliPlayerStringUtils.stringToMD5(s);
+                }
                 String result = s;
                 if (s.contains("?")) {
                     String[] split = s.split("\\?");
@@ -166,7 +172,7 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
                 break;
             case "setLogInfoBlock":
                 boolean isEnable = false;
-                if(call.hasArgument("arg")){
+                if (call.hasArgument("arg")) {
                     isEnable = Boolean.TRUE.equals(call.argument("arg"));
                 }
                 setOnLogCallback(isEnable);
@@ -604,6 +610,7 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     }
 
+    @NonNull
     @Override
     public PlatformView create(Context context, int viewId, Object args) {
         FlutterAliPlayerView flutterAliPlayerView = new FlutterAliPlayerView(context, viewId, args);
@@ -625,5 +632,18 @@ public class FlutterAliplayerPlugin extends PlatformViewFactory implements Flutt
     public void onDispose(int viewId) {
         mFlutterAliPlayerViewMap.remove(viewId);
         AliChannelPool.getInstance().clear();
+    }
+
+
+    /**
+     * 根据变量是否加载 license库
+     */
+    private void checkAvailableRts() {
+        boolean isRts = mContext.getResources().getBoolean(R.bool.use_aio_framework);
+        if (!isRts) {
+            System.loadLibrary("RtsSDK");
+            System.loadLibrary("cicada_plugin_artcSource");
+//            android.util.Log.d(TAG, "loadLibrary RTS");
+        }
     }
 }

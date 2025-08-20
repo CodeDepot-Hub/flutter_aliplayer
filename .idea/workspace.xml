@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11ae4cd7-1343-4417-a930-b6600f68bc17" name="Changes" comment="" />
+    <list default="true" id="11ae4cd7-1343-4417-a930-b6600f68bc17" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliListPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliListPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliMediaLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliMediaLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliPlayerUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliPlayerUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliplayerPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliplayerPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/AliPlayerFactory.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/AliPlayerFactory.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/AliPlayerProxy.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/AliPlayerProxy.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/FlutterAliplayerPlugin.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/FlutterAliplayerPlugin.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/flutter_aliplayer.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ios/flutter_aliplayer.podspec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_alilistplayer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_alilistplayer.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/flutter_aliplayer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_aliplayer.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,7 +48,7 @@
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;1.0/1.0.0&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
@@ -49,5 +63,16 @@
       <updated>1751858238507</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliMediaLoader.java</url>
+          <line>129</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

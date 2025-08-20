@@ -76,11 +76,11 @@ class FlutterAliplayer {
   OnLoadingBegin? _onLoadingBegin;
   OnLoadingProgress? _onLoadingProgress;
   OnLoadingEnd? _onLoadingEnd;
-  OnPrepared? _onPrepared;
-  OnRenderingStart? _onRenderingStart;
+  OnPrepared? onPrepared;
+  OnRenderingStart? onRenderingStart;
   OnVideoSizeChanged? _onVideoSizeChanged;
   OnSeekComplete? _onSeekComplete;
-  OnStateChanged? _onStateChanged;
+  OnStateChanged? onStateChanged;
   OnInfo? _onInfo;
   OnCompletion? _onCompletion;
   OnTrackReady? _onTrackReady;
@@ -134,10 +134,10 @@ class FlutterAliplayer {
 
   /// 播放器事件回调，准备完成事件
   void setOnPrepared(OnPrepared? prepared) {
-    this._onPrepared = prepared;
+    this.onPrepared = prepared;
     FlutterAliPlayerFactory.methodChannel.invokeMethod(
-        'setOnPrepare', wrapWithPlayerId(arg: (null != _onPrepared)));
-    if (null != _onPrepared) {
+        'setOnPrepare', wrapWithPlayerId(arg: (null != onPrepared)));
+    if (null != onPrepared) {
       BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel<String>(
         "aliPlayer_onPrepare${playerId}",
@@ -148,8 +148,8 @@ class FlutterAliplayer {
         Map<String, dynamic> map = jsonDecode(msg!);
         String playerId = map['playerId'];
         String method = map['method'];
-        if (null != _onPrepared && method == "onPrepared") {
-          this._onPrepared!(playerId);
+        if (null != onPrepared && method == "onPrepared") {
+          this.onPrepared!(playerId);
         }
         return '';
       });
@@ -158,10 +158,10 @@ class FlutterAliplayer {
 
   /// 播放器事件回调，首帧显示事件
   void setOnRenderingStart(OnRenderingStart renderingStart) {
-    this._onRenderingStart = renderingStart;
+    this.onRenderingStart = renderingStart;
     FlutterAliPlayerFactory.methodChannel.invokeMethod(
-        'setOnRenderingStart', wrapWithPlayerId(arg: (null != _onRenderingStart)));
-    if (null != _onRenderingStart) {
+        'setOnRenderingStart', wrapWithPlayerId(arg: (null != onRenderingStart)));
+    if (null != onRenderingStart) {
       BasicMessageChannel<String> _basicMessageChannel =
       BasicMessageChannel<String>(
         "aliPlayer_onRenderingStart${playerId}",
@@ -172,8 +172,8 @@ class FlutterAliplayer {
         Map<String, dynamic> map = jsonDecode(msg!);
         String playerId = map['playerId'];
         String method = map['method'];
-        if (null != _onRenderingStart && method == "onRenderingStart") {
-          this._onRenderingStart!(playerId);
+        if (null != onRenderingStart && method == "onRenderingStart") {
+          this.onRenderingStart!(playerId);
         }
         return '';
       });
@@ -231,7 +231,7 @@ class FlutterAliplayer {
 
   /// 播放器状态改变回调
   void setOnStateChanged(OnStateChanged? stateChanged) {
-    this._onStateChanged = stateChanged;
+    this.onStateChanged = stateChanged;
     FlutterAliPlayerFactory.methodChannel.invokeMethod(
         'setOnStateChanged', wrapWithPlayerId(arg: (null != stateChanged)));
     if (null != stateChanged) {
@@ -246,8 +246,8 @@ class FlutterAliplayer {
         int newState = map['newState'];
         String playerId = map['playerId'];
         String method = map['method'];
-        if (null != _onStateChanged && method == "onStateChanged") {
-          this._onStateChanged!(newState, playerId);
+        if (null != onStateChanged && method == "onStateChanged") {
+          this.onStateChanged!(newState, playerId);
         }
         return '';
       });
@@ -1490,13 +1490,13 @@ class FlutterAliplayer {
         FlutterAliPlayerFactory.instanceMap[playerId] ?? this;
     switch (method) {
       case "onPrepared":
-        if (player._onPrepared != null) {
-          player._onPrepared!(playerId);
+        if (player.onPrepared != null) {
+          player.onPrepared!(playerId);
         }
         break;
       case "onRenderingStart":
-        if (player._onRenderingStart != null) {
-          player._onRenderingStart!(playerId);
+        if (player.onRenderingStart != null) {
+          player.onRenderingStart!(playerId);
         }
         break;
       case "onVideoSizeChanged":

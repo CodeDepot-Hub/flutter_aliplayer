@@ -14,7 +14,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-
+import android.util.Log;
 public class FlutterAliMediaLoader implements FlutterPlugin, MethodChannel.MethodCallHandler, EventChannel.StreamHandler {
 
     private Context mContext;
@@ -31,42 +31,57 @@ public class FlutterAliMediaLoader implements FlutterPlugin, MethodChannel.Metho
 
         mEventChannel = new EventChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_aliplayer_media_loader_event");
         mEventChannel.setStreamHandler(this);
-
         mMediaLoader.setOnLoadStatusListener(new MediaLoader.OnLoadStatusListener() {
             @Override
             public void onError(String url, int code, String msg) {
-                Map<String, String> resultMap = new HashMap<>();
-                resultMap.put("method", "onError");
-                resultMap.put("url", url);
-                resultMap.put("code", String.valueOf(code));
-                resultMap.put("msg", msg);
-                mEventSink.success(resultMap);
+                if (mEventSink != null) {
+                    Map<String, String> resultMap = new HashMap<>();
+                    resultMap.put("method", "onError");
+                    resultMap.put("url", url);
+                    resultMap.put("code", String.valueOf(code));
+                    resultMap.put("msg", msg);
+                    mEventSink.success(resultMap);
+                } else {
+                    Log.w("FlutterAliMediaLoader", "EventSink is null, onError ignored. url=" + url);
+                }
             }
 
             @Override
             public void onCompleted(String url) {
-                Map<String, String> resultMap = new HashMap<>();
-                resultMap.put("method", "onCompleted");
-                resultMap.put("url", url);
-                mEventSink.success(resultMap);
+                if (mEventSink != null) {
+                    Map<String, String> resultMap = new HashMap<>();
+                    resultMap.put("method", "onCompleted");
+                    resultMap.put("url", url);
+                    mEventSink.success(resultMap);
+                } else {
+                    Log.w("FlutterAliMediaLoader", "EventSink is null, onCompleted ignored. url=" + url);
+                }
             }
 
             @Override
             public void onCanceled(String url) {
-                Map<String, String> resultMap = new HashMap<>();
-                resultMap.put("method", "onCanceled");
-                resultMap.put("url", url);
-                mEventSink.success(resultMap);
+                if (mEventSink != null) {
+                    Map<String, String> resultMap = new HashMap<>();
+                    resultMap.put("method", "onCanceled");
+                    resultMap.put("url", url);
+                    mEventSink.success(resultMap);
+                } else {
+                    Log.w("FlutterAliMediaLoader", "EventSink is null, onCanceled ignored. url=" + url);
+                }
             }
 
             @Override
             public void onErrorV2(String url, ErrorInfo errorInfo) {
-                Map<String, String> resultMap = new HashMap<>();
-                resultMap.put("method", "onErrorV2");
-                resultMap.put("url", url);
-                resultMap.put("code", errorInfo.getCode().name());
-                resultMap.put("msg", errorInfo.getMsg());
-                mEventSink.success(resultMap);
+                if (mEventSink != null) {
+                    Map<String, String> resultMap = new HashMap<>();
+                    resultMap.put("method", "onErrorV2");
+                    resultMap.put("url", url);
+                    resultMap.put("code", errorInfo.getCode().name());
+                    resultMap.put("msg", errorInfo.getMsg());
+                    mEventSink.success(resultMap);
+                } else {
+                    Log.w("FlutterAliMediaLoader", "EventSink is null, onErrorV2 ignored. url=" + url);
+                }
             }
         });
     }
@@ -119,6 +134,6 @@ public class FlutterAliMediaLoader implements FlutterPlugin, MethodChannel.Metho
 
     @Override
     public void onCancel(Object arguments) {
-
+        mEventSink = null;
     }
 }

@@ -940,6 +940,10 @@ id _Nullable
 }
 
 NSString *hashCallback(NSString *url) {
+    if ([url containsString:@"Ciphertext"]){
+        return [AliPlayerFactory md5:url];
+    }
+    
     NSArray *array = [[url stringByReplacingOccurrencesOfString:@"https" withString:@"http"] componentsSeparatedByString:@"?"];
     NSString *md5Str = array.firstObject;
     return [AliPlayerFactory md5:md5Str];
@@ -1463,7 +1467,6 @@ NSString *hashCallback(NSString *url) {
     AliPlayerProxy *proxy = arr[2];
     NSNumber *idxNum = arr[3];
     AVPTrackInfo *info = [proxy.player getCurrentTrack:idxNum.intValue];
-//    NSLog(@"getCurrentTrack==%@",info.mj_JSONString);
     result(info.mj_keyValues);
 }
 

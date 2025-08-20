@@ -9,7 +9,7 @@
  *  业务标识
  *  TODO: 发布版本前,请修改版本并删除此提示
  */
-static NSString *const kExtraDataFlutter =@"{\"platform\":\"flutter\",\"flutter-version\":\"7.3.0\"}";
+static NSString *const kExtraDataFlutter =@"{\"platform\":\"flutter\",\"flutter-version\":\"7.3.1\"}";
 
 @implementation FlutterAliplayerPlugin
 
