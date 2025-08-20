@@ -126,7 +126,7 @@
 
 - (void)onCompleted:(NSString *)url {
     if (self.eventSink) {
-        self.eventSink(@{kAliPlayerMethod:@"onCompleted", @"url":url ?: @"null"});
+        self.eventSink(@{kAliPlayerMethod:@"onCompleted", @"url":url});
     } else {
         NSLog(@"[FlutterAliMediaLoader] eventSink is nil, onCompleted ignored. url=%@", url);
     }
@@ -134,7 +134,7 @@
 
 - (void)onCanceled:(NSString *)url {
     if (self.eventSink) {
-        self.eventSink(@{kAliPlayerMethod:@"onCanceled", @"url":url ?: @"null"});
+        self.eventSink(@{kAliPlayerMethod:@"onCanceled", @"url":url});
     } else {
         NSLog(@"[FlutterAliMediaLoader] eventSink is nil, onCanceled ignored. url=%@", url);
     }

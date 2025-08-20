@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11ae4cd7-1343-4417-a930-b6600f68bc17" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/FlutterAliMediaLoader.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/FlutterAliMediaLoader.m" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
