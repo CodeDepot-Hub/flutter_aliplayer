@@ -65,8 +65,9 @@
     self.eventSink = eventSink;
     return nil;
 }
- 
+
 - (FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments {
+    self.eventSink = nil;
     return nil;
 }
 
@@ -109,27 +110,49 @@
 
 #pragma mark -- AliMediaLoaderStatusDelegate
 - (void)onError:(NSString *)url code:(int64_t)code msg:(NSString *)msg {
-    //    self.eventSink(@{kAliPlayerMethod:@"onError",@"url":url,@"code":[NSString stringWithFormat:@"%lld", code],@"msg":msg});
+    if (self.eventSink) {
         NSString *urlStr = [self checkIfStringIsNull:url];
         NSString *msgStr = [self checkIfStringIsNull:msg];
-     
-        self.eventSink(@{kAliPlayerMethod:@"onError",@"url":urlStr,@"code":[NSString stringWithFormat:@"%lld", code],@"msg":msgStr});
+        self.eventSink(@{
+                kAliPlayerMethod:@"onError",
+                @"url":urlStr,
+                @"code":[NSString stringWithFormat:@"%lld", code],
+                @"msg":msgStr
+        });
+    } else {
+        NSLog(@"[FlutterAliMediaLoader] eventSink is nil, onError ignored. url=%@", url);
+    }
 }
 
 - (void)onCompleted:(NSString *)url {
-    self.eventSink(@{kAliPlayerMethod:@"onCompleted",@"url":url});
+    if (self.eventSink) {
+        self.eventSink(@{kAliPlayerMethod:@"onCompleted", @"url":url ?: @"null"});
+    } else {
+        NSLog(@"[FlutterAliMediaLoader] eventSink is nil, onCompleted ignored. url=%@", url);
+    }
 }
 
 - (void)onCanceled:(NSString *)url {
-    self.eventSink(@{kAliPlayerMethod:@"onCancel",@"url":url});
+    if (self.eventSink) {
+        self.eventSink(@{kAliPlayerMethod:@"onCanceled", @"url":url ?: @"null"});
+    } else {
+        NSLog(@"[FlutterAliMediaLoader] eventSink is nil, onCanceled ignored. url=%@", url);
+    }
 }
 
-
-- (void)onErrorV2:(NSString *)url errorModel:(AVPErrorModel *)errorModel{
-    NSString *urlStr = [self checkIfStringIsNull:url];
-    NSString *msgStr = [self checkIfStringIsNull:errorModel.message];
- 
-    self.eventSink(@{kAliPlayerMethod:@"onErrorV2",@"url":urlStr,@"code":[NSString stringWithFormat:@"%ld", (long)errorModel.code],@"msg":msgStr});
+- (void)onErrorV2:(NSString *)url errorModel:(AVPErrorModel *)errorModel {
+    if (self.eventSink) {
+        NSString *urlStr = [self checkIfStringIsNull:url];
+        NSString *msgStr = [self checkIfStringIsNull:errorModel.message];
+        self.eventSink(@{
+                kAliPlayerMethod:@"onErrorV2",
+                @"url":urlStr,
+                @"code":[NSString stringWithFormat:@"%ld", (long)errorModel.code],
+                @"msg":msgStr
+        });
+    } else {
+        NSLog(@"[FlutterAliMediaLoader] eventSink is nil, onErrorV2 ignored. url=%@", url);
+    }
 }
 
 #pragma mark -- lazy load

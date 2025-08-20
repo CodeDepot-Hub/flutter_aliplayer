@@ -6,18 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="11ae4cd7-1343-4417-a930-b6600f68bc17" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliListPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliListPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliMediaLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliMediaLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliPlayerUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliPlayerUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliplayerPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/alibaba/fplayer/flutter_aliplayer/FlutterAliplayerPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/AliPlayerFactory.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/AliPlayerFactory.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/AliPlayerProxy.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/AliPlayerProxy.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/FlutterAliplayerPlugin.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/FlutterAliplayerPlugin.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/flutter_aliplayer.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ios/flutter_aliplayer.podspec" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/flutter_alilistplayer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_alilistplayer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/flutter_aliplayer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_aliplayer.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/FlutterAliMediaLoader.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/FlutterAliMediaLoader.m" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,22 +27,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;1.0/1.0.0&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.advertisement.text.has.clang-format": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "1.0/1.0.0",
+    "kotlin-language-version-configured": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="11ae4cd7-1343-4417-a930-b6600f68bc17" name="Changes" comment="" />
